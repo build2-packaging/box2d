@@ -1,0 +1,5 @@
+include/box2d symlink=dir
+src/collision symlink=dir
+src/common symlink=dir
+src/dynamics symlink=dir
+src/rope symlink=dir

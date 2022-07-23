@@ -1,24 +1,8 @@
-pub_hdrs = {hxx ixx txx}{** -version} hxx{version}
+pub_hdrs = hxx{**}
 
 ./: $pub_hdrs
 
-# Include the generated version header into the distribution (so that we don't
-# pick up an installed one) and don't remove it when cleaning in src (so that
-# clean results in a state identical to distributed).
-#
-hxx{version}: in{version} $src_root/manifest
+hxx{*}:
 {
-  dist  = true
-  clean = ($src_root != $out_root)
-}
-
-hxx{export}@./: cxx.importable = false
-
-# Install into the libbox2d/ subdirectory of, say, /usr/include/
-# recreating subdirectories.
-#
-{hxx ixx txx}{*}:
-{
-  install         = include/libbox2d/
   install.subdirs = true
 }
