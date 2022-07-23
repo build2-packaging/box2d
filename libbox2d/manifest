@@ -7,6 +7,7 @@ license: other: MIT
 description-file: README.md
 url: https://box2d.org/
 doc-url: https://box2d.org/documentation/
+src-url : https://github.com/erincatto/box2d
 package-url: https://github.com/build2-packaging/box2d
 package-email: rookfighter@posteo.org
 
