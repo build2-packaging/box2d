@@ -1,5 +1,9 @@
 .bdep/
 
+# Imgui output
+**/imgui.ini
+**/settings.ini
+
 # Local default options files.
 #
 .build2/local/
