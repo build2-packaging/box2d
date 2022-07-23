@@ -1,5 +1,5 @@
 : 1
-name: libbox2d
+name: box2d-testbed
 project: box2d
 version: 2.4.1-a.0.z
 summary: Box2D is a 2D physics engine for games.
@@ -13,3 +13,7 @@ package-email: rookfighter@posteo.org
 
 depends: * build2 >= 0.15.0-
 depends: * bpkg >= 0.15.0-
+
+depends: libbox2d == $
+depends: libimgui-platform-glfw ^1.86.0-
+depends: libimgui-render-opengl3 ^1.86.0-

@@ -1,0 +1,8 @@
+impl_libs = # Implementation dependencies.
+import impl_libs += libbox2d%lib{box2d}
+import impl_libs += libimgui-platform-glfw%lib{imgui-platform-glfw}
+import impl_libs += libimgui-render-opengl3%lib{imgui-render-opengl3}
+
+cxx.poptions += "-I$out_base" "-I$src_base"
+
+exe{box2d-testbed}: {hxx cxx}{**} cxx{**.c} $impl_libs

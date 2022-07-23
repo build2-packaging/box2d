@@ -1,2 +1,5 @@
 : 1
 location: libbox2d/
+
+:
+location: box2d-testbed/
