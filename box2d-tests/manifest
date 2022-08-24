@@ -1,8 +1,8 @@
 : 1
-name: box2d-testbed
+name: box2d-tests
 project: box2d
 version: 2.4.1-a.0.z
-summary: Testbed of the Box2D physics engine for games.
+summary: Unit test package of the Box2D physics engine for games.
 license: other: MIT
 description-file: README.md
 url: https://box2d.org/
@@ -15,5 +15,3 @@ depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
 
 depends: libbox2d == $
-depends: libimgui-platform-glfw ^1.86.0-
-depends: libimgui-render-opengl3 ^1.86.0-

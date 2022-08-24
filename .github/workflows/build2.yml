@@ -36,13 +36,15 @@ jobs:
           submodules: true
       - uses: build2/setup-build2-github-action@v2
         with:
-          build2-version: staged
+          build2-version: latest
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y libx11-dev libxrandr-dev libudev-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev libvulkan-dev
       - name: Configure
         run: bdep init -C @cc cc config.config.load=build-config/${{matrix.config.config_file}}
       - name: Build
         run: b -V
+      - name: Test
+        run: bdep test -V
 
   # Job for building on MacOS
   MacOS:
@@ -67,11 +69,13 @@ jobs:
         cache: true
     - uses: build2/setup-build2-github-action@v2
       with:
-        build2-version: staged
+        build2-version: latest
     - name: Configure
       run: bdep init -C @cc cc config.config.load=build-config/${{matrix.config.config_file}}
     - name: Build
       run: b -V
+    - name: Test
+      run: bdep test -V
 
   # Job for building on Windows
   Windows:
@@ -106,9 +110,11 @@ jobs:
         cache: true
     - uses: build2/setup-build2-github-action@v2
       with:
-        build2-version: staged
+        build2-version: stable
         build2-windows-compiler: ${{matrix.config.compiler_type}}
     - name: Configure
       run: bdep init -C ../box2d-cc @cc cc config.config.load=build-config/${{matrix.config.config_file}}
     - name: Build
       run: b -V
+    - name: Test
+      run: bdep test -V

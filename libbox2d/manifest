@@ -9,7 +9,9 @@ url: https://box2d.org/
 doc-url: https://box2d.org/documentation/
 src-url : https://github.com/erincatto/box2d
 package-url: https://github.com/build2-packaging/box2d
-package-email: rookfighter@posteo.org
+package-email: packaging@build2.org ; Mailing list.
 
-depends: * build2 >= 0.15.0-
-depends: * bpkg >= 0.15.0-
+depends: * build2 >= 0.15.0
+depends: * bpkg >= 0.15.0
+
+tests: box2d-tests == $

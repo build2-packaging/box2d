@@ -3,3 +3,6 @@ location: libbox2d/
 
 :
 location: box2d-testbed/
+
+:
+location: box2d-tests/

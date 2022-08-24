@@ -1,0 +1,4 @@
+impl_libs = # Implementation dependencies.
+import impl_libs += libbox2d%lib{box2d}
+
+exe{unittests}: cxx{**} $impl_libs
