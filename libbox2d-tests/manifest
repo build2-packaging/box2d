@@ -1,5 +1,5 @@
 : 1
-name: box2d-tests
+name: libbox2d-tests
 project: box2d
 version: 2.4.1-a.0.z
 summary: Unit test package of the Box2D physics engine for games.

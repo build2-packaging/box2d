@@ -2,7 +2,7 @@
 location: libbox2d/
 
 :
-location: box2d-testbed/
+location: libbox2d-testbed/
 
 :
-location: box2d-tests/
+location: libbox2d-tests/

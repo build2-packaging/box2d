@@ -1,2 +1,2 @@
-import pkgs = {libbox2d/ box2d-testbed/ box2d-tests/}
+import pkgs = {libbox2d/ libbox2d-testbed/ libbox2d-tests/}
 ./: $pkgs

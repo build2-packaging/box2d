@@ -1,4 +1,4 @@
-project = box2d-testbed
+project = libbox2d-testbed
 
 using version
 using config
