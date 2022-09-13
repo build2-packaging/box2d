@@ -1,4 +1,5 @@
 impl_libs = # Implementation dependencies.
 import impl_libs += libbox2d%lib{box2d}
 
-exe{unittests}: cxx{**} $impl_libs
+cxx.poptions += "-I$out_base" "-I$src_base"
+exe{unittests}: {hxx cxx}{**} $impl_libs
