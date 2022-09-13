@@ -15,5 +15,5 @@ depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
 
 depends: libbox2d == $
-depends: libimgui-platform-glfw ^1.86.0-
-depends: libimgui-render-opengl3 ^1.86.0-
+depends: libimgui-platform-glfw ^1.86.0
+depends: libimgui-render-opengl3 ^1.86.0
