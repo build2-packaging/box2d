@@ -3,7 +3,7 @@ name: libbox2d-tests
 project: box2d
 version: 2.4.1
 summary: Unit test package of the Box2D physics engine for games.
-license: other: MIT
+license: MIT
 description-file: README.md
 url: https://box2d.org/
 doc-url: https://box2d.org/documentation/
@@ -13,5 +13,3 @@ package-email: packaging@build2.org ; Mailing list.
 
 depends: * build2 >= 0.15.0
 depends: * bpkg >= 0.15.0
-
-depends: libbox2d == $
