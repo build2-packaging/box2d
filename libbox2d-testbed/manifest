@@ -1,7 +1,7 @@
 : 1
 name: libbox2d-testbed
 project: box2d
-version: 2.4.1+1
+version: 3.1.1-a.0.z
 summary: Testbed of the Box2D physics engine for games.
 license: MIT
 description-file: README.md
