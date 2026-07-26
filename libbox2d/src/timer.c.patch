@@ -1,0 +1,11 @@
+--- timer.c.orig	2026-07-26 21:15:59.931886900 +0200
++++ timer.c	2026-07-26 21:15:59.918315700 +0200
+@@ -65,7 +65,7 @@
+ 	SwitchToThread();
+ }
+ 
+-#elif defined( __linux__ ) || defined( __EMSCRIPTEN__ )
++#elif defined( __linux__ ) || defined( __EMSCRIPTEN__ ) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __NetBSD__ )
+ 
+ #include <sched.h>
+ #include <time.h>
