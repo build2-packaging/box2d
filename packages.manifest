@@ -1,8 +1,2 @@
 : 1
 location: libbox2d/
-
-:
-location: libbox2d-testbed/
-
-:
-location: libbox2d-tests/

@@ -1,0 +1,40 @@
+# Upstream white-box unit suite.
+#
+# Internal symbols are not exported from the DLL, so white-box tests must link
+# against the static archive.
+#
+# test_determinism.c is omitted: it requires enkiTS, which is not available as
+# a build2 package. The remaining suite covers public and internal APIs.
+import libs = libbox2d%liba{box2d}
+import! [metadata, rule_hint=c.link] box2d = libbox2d%lib{box2d}
+
+include ../shared/
+
+./: exe{driver}: {c h}{**} ../shared/libue{box2d-test-shared} $libs
+
+# Private implementation headers live in the package src/ directory. The tests
+# subproject has its own src_root (tests/), so walk up to the package root.
+#
+out_pfx_src = [dir_path] $out_root/../src/
+src_pfx_src = [dir_path] $src_root/../src/
+out_pfx_shared = [dir_path] $out_base/../shared/
+src_pfx_shared = [dir_path] $src_base/../shared/
+
+c.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
+              "-I$out_pfx_shared" "-I$src_pfx_shared"
+
+# Deterministic math (match upstream CMake: -ffp-contract=off).
+#
+if ($c.id != 'msvc')
+  c.coptions += -ffp-contract=off
+
+# Match private library compile flags used by helpers that touch internals.
+#
+if $($box2d: libbox2d.disable_simd)
+  c.poptions += -DBOX2D_DISABLE_SIMD
+
+if $($box2d: libbox2d.avx2)
+  c.poptions += -DBOX2D_AVX2
+
+if $($box2d: libbox2d.validate)
+  c.poptions += -DBOX2D_VALIDATE

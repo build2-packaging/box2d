@@ -1,18 +1,41 @@
 # Uncomment to suppress warnings coming from external libraries.
 #
-#cxx.internal.scope = current
+#c.internal.scope = current
 
-cxx.std = latest
-
-using cxx
-
-hxx{*}: extension = h
-cxx{*}: extension = cpp
-
-# Assume headers are importable unless stated otherwise.
+# Box2D requires C17 (_Static_assert, anonymous unions).
 #
-hxx{*}: cxx.importable = true
+c.std = 17
+
+using c
+
+# build2 does not yet map c.std to a /std: flag on MSVC
+# https://github.com/build2/build2/issues/323
+#
+if ($c.id == 'msvc')
+  c.coptions += /std:c17
+
+h{*}: extension = h
+c{*}: extension = c
 
 # The test target for cross-testing (running tests under Wine, etc).
 #
-test.target = $cxx.target
+test.target = $c.target
+
+# Build the scalar fallback instead of SSE2/NEON/AVX2 (slower).
+#
+config [bool] config.libbox2d.disable_simd ?= false
+
+# Enable AVX2 on x86_64 (wider SIMD). No effect when disable_simd is true.
+#
+config [bool] config.libbox2d.avx2 ?= false
+
+# Keep B2_ASSERT active even in release builds (NDEBUG defined).
+# Upstream sets this for MSVC RelWithDebInfo via a PUBLIC define so consumers
+# also see it. Default off to match the release behaviour of other platforms.
+#
+config [bool] config.libbox2d.enable_assert ?= false
+
+# Enable heavy internal validation when NDEBUG is not defined.
+# Matches upstream CMake default ON for a top-level library build.
+#
+config [bool] config.libbox2d.validate ?= true

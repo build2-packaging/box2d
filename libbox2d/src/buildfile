@@ -1,6 +1,8 @@
 intf_libs = # Interface dependencies.
 impl_libs = # Implementation dependencies.
 
+# Public headers.
+#
 pub = [dir_path] ../include/
 
 include $pub
@@ -8,33 +10,130 @@ include $pub
 pub_hdrs = $($pub/ pub_hdrs)
 
 lib{box2d}: $pub/{$pub_hdrs}
-lib{box2d}: {hxx cxx}{**} $impl_libs $intf_libs
 
+# Private headers and sources as well as dependencies.
+#
+lib{box2d}: {h c}{**} $impl_libs $intf_libs
+
+# Make .natvis available to the compilation (MSVC debugger visualizers).
+#
+lib{box2d}: file{**.natvis}: include = adhoc
+
+# Build options.
+#
 out_pfx_inc = [dir_path] $out_root/include/
 src_pfx_inc = [dir_path] $src_root/include/
 out_pfx_src = [dir_path] $out_root/src/
 src_pfx_src = [dir_path] $src_root/src/
 
-cxx.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
-                "-I$out_pfx_inc" "-I$src_pfx_inc" \
-				-Dbox2d_EXPORTS
+c.poptions =+ "-I$out_pfx_src" "-I$src_pfx_src" \
+              "-I$out_pfx_inc" "-I$src_pfx_inc"
 
-{hbmis objs}{*}: cxx.poptions += -DB2_SHARED
+# Map config.libbox2d.* to BOX2D_* / B2_* macros.
+#
+if $config.libbox2d.disable_simd
+  c.poptions += -DBOX2D_DISABLE_SIMD
 
-lib{box2d}:
+if $config.libbox2d.avx2
+  c.poptions += -DBOX2D_AVX2
+
+if $config.libbox2d.enable_assert
+  c.poptions += -DB2_ENABLE_ASSERT
+
+if $config.libbox2d.validate
+  c.poptions += -DBOX2D_VALIDATE
+
+# Deterministic math (match upstream CMake: -ffp-contract=off).
+# Hidden visibility (match upstream CMake: CMAKE_C_VISIBILITY_PRESET hidden).
+#
+if ($c.id != 'msvc')
 {
-  cxx.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
-  cxx.export.libs = $intf_libs
+  c.coptions += -ffp-contract=off
+  objs{*}: c.coptions += -fvisibility=hidden
 }
 
-libs{box2d}: cxx.export.poptions += -DB2_SHARED
+# AVX2 arch flag (match upstream CMake: /arch:AVX2 or -mavx2).
+#
+if ($config.libbox2d.avx2 && !$config.libbox2d.disable_simd)
+{
+  if ($c.id == 'msvc')
+    c.coptions += /arch:AVX2
+  elif ($c.target.cpu == 'x86_64' || $c.target.cpu == 'i386')
+    c.coptions += -mavx2
+}
 
-# For pre-releases use the complete version to make sure they cannot be used
-# in place of another pre-release or the final version. See the version module
-# for details on the version.* variable values.
+# Emscripten requires explicit flags to enable WebAssembly SIMD and map SSE2
+# intrinsics onto it (match upstream CMake: -msimd128 -msse2).
+#
+if (!$config.libbox2d.disable_simd && $c.target.system == 'emscripten')
+  c.coptions += -msimd128 -msse2
+
+# Shared library export: upstream uses box2d_EXPORTS when building the shared
+# library and BOX2D_DLL when consuming the Windows DLL.
+#
+objs{*}: c.poptions += -Dbox2d_EXPORTS
+
+# timer.c uses clock_gettime(CLOCK_MONOTONIC). With -std=c17 (strict ISO),
+# glibc/musl hide those behind a feature-test macro. Upstream avoids this via
+# C_EXTENSIONS YES (gnu17). Only the Linux/Emscripten/BSD branch is affected
+# (Windows and Apple use other APIs).
+#
+if ($c.target.class != 'windows' && $c.target.class != 'macos')
+  obj{timer}: c.poptions += "-D_POSIX_C_SOURCE=200809L"
+
+# System libraries.
+#
+if ($c.target.system != 'win32-msvc')
+{
+  # libm for sqrtf and friends on Unix-like systems.
+  #
+  c.libs += -lm
+}
+
+# Export options.
+#
+lib{box2d}:
+{
+  c.export.poptions = "-I$out_pfx_inc" "-I$src_pfx_inc"
+  c.export.libs = $intf_libs
+
+  # Export configuration as target metadata so consumers and the tests
+  # subproject can query compile-time options.
+  #
+  export.metadata = 1 libbox2d
+
+  libbox2d.disable_simd  = [bool] $config.libbox2d.disable_simd
+  libbox2d.avx2          = [bool] $config.libbox2d.avx2
+  libbox2d.enable_assert = [bool] $config.libbox2d.enable_assert
+  libbox2d.validate      = [bool] $config.libbox2d.validate
+}
+
+# Upstream declares B2_ENABLE_ASSERT PUBLIC so consumers see active asserts too.
+#
+if $config.libbox2d.enable_assert
+  lib{box2d}: c.export.poptions += -DB2_ENABLE_ASSERT
+
+# Consumers of the Windows shared library need BOX2D_DLL for dllimport.
+#
+if ($c.target.class == 'windows')
+  libs{box2d}: c.export.poptions += -DBOX2D_DLL
+
+# Re-export system libs that are part of the public link interface.
+#
+if ($c.target.system != 'win32-msvc')
+  lib{box2d}: c.export.libs += -lm
+
+# For pre-releases use the complete version to make sure they cannot
+# be used in place of another pre-release or the final version. See
+# the version module for details on the version.* variable values.
+#
 if $version.pre_release
   lib{box2d}: bin.lib.version = "-$version.project_id"
 else
   lib{box2d}: bin.lib.version = "-$version.major.$version.minor"
 
-{hxx ixx txx}{*}: install = false
+# Don't install private headers.
+#
+h{*}: install = false
+
+file{**.natvis}: install = share/box2d/

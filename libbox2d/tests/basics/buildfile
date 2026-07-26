@@ -1,0 +1,3 @@
+import libs = libbox2d%lib{box2d}
+
+exe{driver}: {h c}{**} $libs
