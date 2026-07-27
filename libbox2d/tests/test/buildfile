@@ -3,9 +3,10 @@
 # Internal symbols are not exported from the DLL, so white-box tests must link
 # against the static archive.
 #
-# test_determinism.c is omitted: it requires enkiTS, which is not available as
-# a build2 package. The remaining suite covers public and internal APIs.
+# test_determinism.c uses enkiTS for the multithreaded determinism check.
+#
 import libs = libbox2d%liba{box2d}
+import libs += libenkits%lib{enkits}
 import! [metadata, rule_hint=c.link] box2d = libbox2d%lib{box2d}
 
 include ../shared/
