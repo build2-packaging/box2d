@@ -1,5 +1,5 @@
 : 1
-summary: libbox2d project repository
+summary: box2d project repository
 
 :
 role: prerequisite

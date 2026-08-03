@@ -1,0 +1,29 @@
+# In-tree helpers used by upstream unit tests.
+#
+# Internal symbols are not exported from the DLL, so white-box tests must link
+# against the static archive.
+import libs = libbox2d%liba{box2d}
+import! [metadata, rule_hint=c.link] box2d = libbox2d%lib{box2d}
+
+./: libue{box2d-test-shared}
+
+libue{box2d-test-shared}: {h c}{**} $libs
+
+# Deterministic math (match upstream CMake: -ffp-contract=off).
+#
+if ($c.id != 'msvc')
+  c.coptions += -ffp-contract=off
+
+# Match private library compile flags used by helpers that touch internals.
+#
+if $($box2d: libbox2d.disable_simd)
+  c.poptions += -DBOX2D_DISABLE_SIMD
+
+if $($box2d: libbox2d.avx2)
+  c.poptions += -DBOX2D_AVX2
+
+if (!$($box2d: libbox2d.disable_simd) && $c.target.system == 'emscripten')
+  c.coptions += -msimd128 -msse2
+
+if $($box2d: libbox2d.validate)
+  c.poptions += -DBOX2D_VALIDATE

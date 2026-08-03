@@ -1,0 +1,4 @@
+# Benchmark app writes timing CSV/DAT relative to the process CWD.
+#
+*.csv
+*.dat

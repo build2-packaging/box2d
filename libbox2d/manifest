@@ -1,18 +1,18 @@
 : 1
 name: libbox2d
+version: 3.1.1-a.0.z
+language: c
 project: box2d
-version: 2.4.1+1
-summary: Box2D is a 2D physics engine for games.
-license: MIT
+summary: 2D physics engine for games
+license: MIT ; MIT License.
+topics: physics, engine, collision detection, rigid body
 description-file: README.md
-url: https://box2d.org/
+package-description-file: PACKAGE-README.md
+url: https://box2d.org
+src-url: https://github.com/erincatto/box2d
 doc-url: https://box2d.org/documentation/
-src-url : https://github.com/erincatto/box2d
 package-url: https://github.com/build2-packaging/box2d
 package-email: packaging@build2.org ; Mailing list.
-
-depends: * build2 >= 0.15.0
-depends: * bpkg >= 0.15.0
-
-tests: libbox2d-tests == $
-examples: libbox2d-testbed == $
+depends: * build2 >= 0.18.0
+depends: * bpkg >= 0.18.0
+depends: libenkits ^1.12.0

@@ -1,7 +1,0 @@
-project = libbox2d-testbed
-
-using version
-using config
-using test
-using install
-using dist

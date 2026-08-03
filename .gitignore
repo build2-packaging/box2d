@@ -1,34 +1,14 @@
 .bdep/
 
-# Imgui output
-**/imgui.ini
-**/settings.ini
-
 # Local default options files.
 #
 .build2/local/
 
-# Compiler/linker output.
+# Compilation database.
 #
-*.d
-*.t
-*.i
-*.i.*
-*.ii
-*.ii.*
-*.o
-*.obj
-*.gcm
-*.pcm
-*.ifc
-*.so
-*.dll
-*.a
-*.lib
-*.exp
-*.pdb
-*.ilk
-*.exe
-*.exe.dlls/
-*.exe.manifest
-*.pc
+compile_commands.json
+
+# Benchmark app writes timing CSV/DAT relative to the process CWD.
+#
+*.csv
+*.dat
