@@ -46,7 +46,7 @@ This package provides the following configuration variables:
 [bool] config.libbox2d.disable_simd  ?= false
 [bool] config.libbox2d.avx2          ?= false
 [bool] config.libbox2d.enable_assert ?= false
-[bool] config.libbox2d.validate      ?= true
+[bool] config.libbox2d.validate      ?= false
 ```
 
 `config.libbox2d.disable_simd` builds the scalar math fallback instead of

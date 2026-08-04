@@ -36,6 +36,6 @@ config [bool] config.libbox2d.avx2 ?= false
 config [bool] config.libbox2d.enable_assert ?= false
 
 # Enable heavy internal validation when NDEBUG is not defined.
-# Matches upstream CMake default ON for a top-level library build.
+# Upstream CMake default ON, but it is noticably slower so we default false.
 #
-config [bool] config.libbox2d.validate ?= true
+config [bool] config.libbox2d.validate ?= false
